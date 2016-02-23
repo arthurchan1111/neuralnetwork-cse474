@@ -2,6 +2,7 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.io import loadmat
 from math import sqrt
+from math import exp
 
 
 def initializeWeights(n_in,n_out):
@@ -20,17 +21,20 @@ def initializeWeights(n_in,n_out):
     W = (np.random.rand(n_out, n_in + 1)*2* epsilon) - epsilon;
     return W
     
-    
+
+def simpleSigmoid(z):
+    return 1/(1+exp(z));
+
+vSigmoid = np.vectorize(simpleSigmoid);    
     
 def sigmoid(z):
     
     """# Notice that z can be a scalar, a vector or a matrix
     # return the sigmoid of input z"""
     
-    return  #your code here
+    return  vSigmoid(z);
     
     
-
 def preprocess():
     """ Input:
      Although this function doesn't have any input, you are required to load
@@ -78,7 +82,7 @@ def preprocess():
     test_data = np.concatenate((mat.get('test0'),mat.get('test1'),mat.get('test2'),mat.get('test3'),mat.get('test4'),mat.get('test5'),mat.get('test6'),mat.get('test7'),mat.get('test8'),mat.get('test9')), axis=0)
     test_data = test_data/255.0
     
-        """Creates a 10000 x 10 label matrix corresponding to the test_data matrix.  They are essentially in parallel so for example, the data at index 5 in test_data will match up with the label at index 5 in test_label.  Each row is 10 units long and corresponds to a digit 0-9."""
+    """Creates a 10000 x 10 label matrix corresponding to the test_data matrix.  They are essentially in parallel so for example, the data at index 5 in test_data will match up with the label at index 5 in test_label.  Each row is 10 units long and corresponds to a digit 0-9."""
     test_label = np.concatenate(((np.full((len(mat.get('test0')), 10), [1,0,0,0,0,0,0,0,0,0])),(np.full((len(mat.get('test1')), 10), [0,1,0,0,0,0,0,0,0,0])),(np.full((len(mat.get('test2')), 10), [0,0,1,0,0,0,0,0,0,0])),(np.full((len(mat.get('test3')), 10), [0,0,0,1,0,0,0,0,0,0])),(np.full((len(mat.get('test4')), 10), [0,0,0,0,1,0,0,0,0,0])),(np.full((len(mat.get('test5')), 10), [0,0,0,0,0,1,0,0,0,0])),(np.full((len(mat.get('test6')), 10), [0,0,0,0,0,0,1,0,0,0])),(np.full((len(mat.get('test7')), 10), [0,0,0,0,0,0,0,1,0,0])),(np.full((len(mat.get('test8')), 10), [0,0,0,0,0,0,0,0,1,0])),(np.full((len(mat.get('test9')), 10), [0,0,0,0,0,0,0,0,0,1]))), axis=0)
 
     return train_data, train_label, validation_data, validation_label, test_data, test_label
