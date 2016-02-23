@@ -2,7 +2,9 @@ import numpy as np
 from scipy.optimize import minimize
 from scipy.io import loadmat
 from math import sqrt
-    
+from math import exp
+
+
 def initializeWeights(n_in,n_out):
     """
     # initializeWeights return the random weights for Neural Network given the
@@ -20,13 +22,19 @@ def initializeWeights(n_in,n_out):
     return W
     
     
+    
+def simpleSigmoid(z):
+    return 1/(1+exp(z));
+    
+vSigmoid = np.vectorize(simpleSigmoid);
+    
 def sigmoid(z):
     
     """# Notice that z can be a scalar, a vector or a matrix
     # return the sigmoid of input z"""
+    return vSigmoid(z);
     
-    return; #Your code here
-
+    
 
 def preprocess():
     """ Input:
@@ -56,18 +64,28 @@ def preprocess():
      - feature selection"""
     
     mat = loadmat('mnist_all.mat') #loads the MAT object as a Dictionary
+
+    """Stacks all training matrices into one 60000 x 784 matrix and normalizes it to the range [0,1]"""
+    allTrain = np.concatenate((mat.get('train0'),mat.get('train1'),mat.get('train2'),mat.get('train3'),mat.get('train4'),mat.get('train5'),mat.get('train6'),mat.get('train7'),mat.get('train8'),mat.get('train9')), axis=0)
+    allTrain = allTrain/255.0
     
-    #Pick a reasonable size for validation data
+    """Creates a 60000 x 10 label matrix corresponding to the allTrain matrix.  They are essentially in parallel so for example, the data at index 5 in allTrain will match up with the label at index 5 in allTrainLabel.  Each row is 10 units long and corresponds to a digit 0-9."""
+    allTrainLabel = np.concatenate(((np.full((len(mat.get('train0')), 10), [1,0,0,0,0,0,0,0,0,0])),(np.full((len(mat.get('train1')), 10), [0,1,0,0,0,0,0,0,0,0])),(np.full((len(mat.get('train2')), 10), [0,0,1,0,0,0,0,0,0,0])),(np.full((len(mat.get('train3')), 10), [0,0,0,1,0,0,0,0,0,0])),(np.full((len(mat.get('train4')), 10), [0,0,0,0,1,0,0,0,0,0])),(np.full((len(mat.get('train5')), 10), [0,0,0,0,0,1,0,0,0,0])),(np.full((len(mat.get('train6')), 10), [0,0,0,0,0,0,1,0,0,0])),(np.full((len(mat.get('train7')), 10), [0,0,0,0,0,0,0,1,0,0])),(np.full((len(mat.get('train8')), 10), [0,0,0,0,0,0,0,0,1,0])),(np.full((len(mat.get('train9')), 10), [0,0,0,0,0,0,0,0,0,1]))), axis=0)
+
+    """This splits and shuffles both the data and label matrixes in the same order so they will still match up into a validation set and a training set"""
+    seed = np.random.permutation(60000)
+    train_data = allTrain[seed[:50000],:]
+    validation_data = allTrain[seed[50000:],:]
+    train_label = allTrainLabel[seed[:50000],:]
+    validation_label = allTrainLabel[seed[50000:],:]
+
+    """Stacks all test matrices into one 10000 x 784 matrix and normalizes it to the range [0,1]"""
+    test_data = np.concatenate((mat.get('test0'),mat.get('test1'),mat.get('test2'),mat.get('test3'),mat.get('test4'),mat.get('test5'),mat.get('test6'),mat.get('test7'),mat.get('test8'),mat.get('test9')), axis=0)
+    test_data = test_data/255.0
     
-    
-    #Your code here
-    train_data = np.array([])
-    train_label = np.array([])
-    validation_data = np.array([])
-    validation_label = np.array([])
-    test_data = np.array([])
-    test_label = np.array([])
-    
+    """Creates a 10000 x 10 label matrix corresponding to the test_data matrix.  They are essentially in parallel so for example, the data at index 5 in test_data will match up with the label at index 5 in test_label.  Each row is 10 units long and corresponds to a digit 0-9."""
+    test_label = np.concatenate(((np.full((len(mat.get('test0')), 10), [1,0,0,0,0,0,0,0,0,0])),(np.full((len(mat.get('test1')), 10), [0,1,0,0,0,0,0,0,0,0])),(np.full((len(mat.get('test2')), 10), [0,0,1,0,0,0,0,0,0,0])),(np.full((len(mat.get('test3')), 10), [0,0,0,1,0,0,0,0,0,0])),(np.full((len(mat.get('test4')), 10), [0,0,0,0,1,0,0,0,0,0])),(np.full((len(mat.get('test5')), 10), [0,0,0,0,0,1,0,0,0,0])),(np.full((len(mat.get('test6')), 10), [0,0,0,0,0,0,1,0,0,0])),(np.full((len(mat.get('test7')), 10), [0,0,0,0,0,0,0,1,0,0])),(np.full((len(mat.get('test8')), 10), [0,0,0,0,0,0,0,0,1,0])),(np.full((len(mat.get('test9')), 10), [0,0,0,0,0,0,0,0,0,1]))), axis=0)
+
     return train_data, train_label, validation_data, validation_label, test_data, test_label
     
     
