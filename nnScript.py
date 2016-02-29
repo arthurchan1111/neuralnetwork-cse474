@@ -23,7 +23,7 @@ def initializeWeights(n_in,n_out):
     
 
 def simpleSigmoid(z):
-    return 1/(1+exp(z));
+    return 1/(1+exp(-z));
 
 vSigmoid = np.vectorize(simpleSigmoid);    
     
@@ -135,26 +135,26 @@ def nnObjFunction(params, *args):
     obj_val = 0  
     
     #Get bias dimension
-	bias_dimension = training_data.shape[0]
-	#Fill it all with ones
-	bias = np.ones(bias_dimension,1)
-	#Add bias to weights 
-	training_data_with_bias = np.concatenate((bias,training_data),1)
-	
-	#Feed Foward Start By Multiplying Training data by weights of w1
-	z2 = training_data_with_bias * w1
-    #Apply Sigmoid function
-	 a2= sigmoid(z2)
-    #Apply Another Bias Dimension to the new matrix
-	 a2_bias= np.concatenate((bias_dimension,a2),1)
-	
-	#Multiply new matrix by the weights of w2
-     z3= a2_bias * w2
-	
-	#Apply Sigmoid Function to the new data
-     y= sigmoid(z3)
+    bias_dimension = training_data.shape[0]
+    #Fill it all with ones
+    bias = np.ones(bias_dimension,1)
+    #Add bias to weights 
+    training_data_with_bias = np.concatenate((bias,training_data),1)
     
-	# Finish Forward Propagation
+    #Feed Foward Start By Multiplying Training data by weights of w1
+    z2 = training_data_with_bias * w1
+    #Apply Sigmoid function
+    a2= sigmoid(z2)
+    #Apply Another Bias Dimension to the new matrix
+    a2_bias= np.concatenate((bias_dimension,a2),1)
+    
+    #Multiply new matrix by the weights of w2
+    z3= a2_bias * w2
+    
+    #Apply Sigmoid Function to the new data
+    y= sigmoid(z3)
+    
+    # Finish Forward Propagation
     
     #Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
     #you would use code similar to the one below to create a flat array
@@ -203,9 +203,9 @@ n_input = train_data.shape[1];
 
 # set the number of nodes in hidden unit (not including bias unit)
 n_hidden = 50;
-				   
+                   
 # set the number of nodes in output unit
-n_class = 10;				   
+n_class = 10;                   
 
 # initialize the weights into some random matrices
 initial_w1 = initializeWeights(n_input, n_hidden);
