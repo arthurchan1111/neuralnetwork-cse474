@@ -23,7 +23,7 @@ def initializeWeights(n_in,n_out):
     
 
 def simpleSigmoid(z):
-    return 1/(1+exp(z));
+    return 1/(1+exp(-z));
 
 vSigmoid = np.vectorize(simpleSigmoid);    
     
