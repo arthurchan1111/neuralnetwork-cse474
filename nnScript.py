@@ -242,9 +242,9 @@ def nnObjFunction(params, *args):
     elem2=(-1*(1-a2)*(a2))*(np.dot((dif*dif2*y),w2trim))
 
 #summing up the inner part of equation (17)
-#     total=np.zeros_like(w1)
-#     for x in range(0,y.shape[0]):
-#         total+=np.dot(np.transpose(np.array(elem2[x],ndmin=2)),np.array(training_data_with_bias[x],ndmin=2))
+    total=np.zeros_like(w1)
+    for x in range(0,y.shape[0]):
+        total+=np.dot(np.transpose(np.array(elem2[x],ndmin=2)),np.array(training_data_with_bias[x],ndmin=2))
 
     #equation (17)
     grad_w1 = (np.dot(np.transpose(elem2, training_data_with_bias))+(lambdaval*w1))/y.shape[0]
