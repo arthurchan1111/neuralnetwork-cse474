@@ -247,7 +247,7 @@ def nnObjFunction(params, *args):
         total+=np.dot(np.transpose(np.array(elem2[x],ndmin=2)),np.array(training_data_with_bias[x],ndmin=2))
 
     #equation (17)
-    grad_w1 = (np.dot(np.transpose(elem2, training_data_with_bias))+(lambdaval*w1))/y.shape[0]
+    grad_w1 = (total+(lambdaval*w1))/y.shape[0]
 
     #equation (16)
     grad_w2 = (np.dot(elem1,a2_bias)+(lambdaval*w2))/y.shape[0]
@@ -340,7 +340,7 @@ train_data, train_label, validation_data,validation_label, test_data, test_label
 n_input = train_data.shape[1]; 
 
 # set the number of nodes in hidden unit (not including bias unit)
-n_hidden = 12;
+n_hidden = 16;
                    
 # set the number of nodes in output unit
 n_class = 10;                   
