@@ -217,7 +217,7 @@ def nnObjFunction(params, *args):
 
     #Multiply new matrix by the weights of w2
     z3 = np.dot(a2_bias,np.transpose(w2))
-	
+    
     #Apply Sigmoid Function to the new data
     y= sigmoid(z3)
 
@@ -242,19 +242,19 @@ def nnObjFunction(params, *args):
     elem2=(-1*(1-a2)*(a2))*(np.dot((dif*dif2*y),w2trim))
 
 #summing up the inner part of equation (17)
-    total=np.zeros_like(w1)
-    for x in range(0,y.shape[0]):
-        total+=np.dot(np.transpose(np.array(elem2[x],ndmin=2)),np.array(training_data_with_bias[x],ndmin=2))
+#     total=np.zeros_like(w1)
+#     for x in range(0,y.shape[0]):
+#         total+=np.dot(np.transpose(np.array(elem2[x],ndmin=2)),np.array(training_data_with_bias[x],ndmin=2))
 
     #equation (17)
-    grad_w1 = (total+(lambdaval*w1))/y.shape[0]
+    grad_w1 = (np.dot(np.transpose(elem2, training_data_with_bias))+(lambdaval*w1))/y.shape[0]
 
     #equation (16)
     grad_w2 = (np.dot(elem1,a2_bias)+(lambdaval*w2))/y.shape[0]
 
     
     
-    	
+        
     #Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
     #you would use code similar to the one below to create a flat array
     obj_grad = np.concatenate((grad_w1.flatten(), grad_w2.flatten()),0)
@@ -305,7 +305,7 @@ def nnPredict(w1,w2,data):
 
     #Multiply new matrix by the weights of w2
     z3 = np.dot(a2_bias,np.transpose(w2))
-	
+    
     #Apply Sigmoid Function to the new data
     y= sigmoid(z3)
 
@@ -340,10 +340,10 @@ train_data, train_label, validation_data,validation_label, test_data, test_label
 n_input = train_data.shape[1]; 
 
 # set the number of nodes in hidden unit (not including bias unit)
-n_hidden = 16;
-				   
+n_hidden = 12;
+                   
 # set the number of nodes in output unit
-n_class = 10;				   
+n_class = 10;                   
 
 # initialize the weights into some random matrices
 initial_w1 = initializeWeights(n_input, n_hidden);
@@ -353,7 +353,7 @@ initial_w2 = initializeWeights(n_hidden, n_class);
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()),0)
 
 # set the regularization hyper-parameter
-lambdaval = .5;
+lambdaval = .3;
 
 args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
 
